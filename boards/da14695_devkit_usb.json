@@ -1,7 +1,7 @@
 {
     "build": {
       "cpu": "cortex-m33",
-      "extra_flags": "",
+      "extra_flags": "-DDA1495",
       "f_cpu": "32000000L",
       "mcu": "da14695",
       "cmsis_series": "da1469x"
