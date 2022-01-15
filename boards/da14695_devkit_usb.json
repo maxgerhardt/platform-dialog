@@ -8,7 +8,7 @@
     },
     "debug": {
       "jlink_device": "CORTEX-M33",
-      "openocd_target": "",
+      "openocd_target": "to_be_filled.cfg",
       "svd_path": "da14695.svd",
       "default_tools": [
         "jlink"
