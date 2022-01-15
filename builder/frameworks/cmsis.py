@@ -25,7 +25,10 @@ board = env.BoardConfig()
 mcu = board.get("build.mcu", "")
 cmsis_series = board.get("build.cmsis_series", "")
 
+env.SConscript("_bare.py")
+
 CMSIS_DIR = platform.get_package_dir("framework-cmsis-dialog")
+CMSIS_INC_DIR = join(CMSIS_DIR, "cmsis")
 CMSIS_DEVICE_DIR = join(CMSIS_DIR, "dialog", cmsis_series)
 LDSCRIPTS_DIR = join(CMSIS_DIR, "platformio", "ldscripts")
 assert all(isdir(d) for d in (CMSIS_DIR, CMSIS_DEVICE_DIR, LDSCRIPTS_DIR))
@@ -47,8 +50,13 @@ if not board.get("build.ldscript", ""):
 
 env.Append(
     CPPPATH=[
-        #os.path.join(CMSIS_DIR, "CMSIS", "Include"),
-        os.path.join(CMSIS_DEVICE_DIR, "inc")
+        CMSIS_INC_DIR,
+        os.path.join(CMSIS_DEVICE_DIR, "inc"),
+        os.path.join(CMSIS_DEVICE_DIR, "src"),
+    ],
+    CCFLAGS=[
+        "-include\"bsp_definitions.h\"", 
+        "-include\"bsp_defaults.h\"" 
     ],
     LINKFLAGS=[
         "--specs=nano.specs",
