@@ -108,9 +108,11 @@ target_elf = None
 if "nobuild" in COMMAND_LINE_TARGETS:
     target_elf = join("$BUILD_DIR", "${PROGNAME}.elf")
     target_firm = join("$BUILD_DIR", "${PROGNAME}.bin")
+    target_hex = join("$BUILD_DIR", "${PROGNAME}.hex")
 else:
     target_elf = env.BuildProgram()
     target_firm = env.ElfToBin(join("$BUILD_DIR", "${PROGNAME}"), target_elf)
+    target_hex = env.ElfToHex(join("$BUILD_DIR", "${PROGNAME}"), target_elf)
     env.Depends(target_firm, "checkprogsize")
 
 AlwaysBuild(env.Alias("nobuild", target_firm))
@@ -171,8 +173,7 @@ elif upload_protocol.startswith("jlink"):
         script_path = join(build_dir, "upload.jlink")
         commands = [
             "h",
-            "loadbin %s, %s" % (source, board.get(
-                "upload.offset_address", "0x08000000")),
+            "loadfile %s" % (source),
             "r",
             "q"
         ]
@@ -192,6 +193,7 @@ elif upload_protocol.startswith("jlink"):
         ],
         UPLOADCMD='$UPLOADER $UPLOADERFLAGS -CommanderScript "${__jlink_cmd_script(__env__, SOURCE)}"'
     )
+    upload_source = target_hex
     upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")]
 
 elif upload_protocol in debug_tools:

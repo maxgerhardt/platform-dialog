@@ -44,6 +44,8 @@ env.Append(
 
     LINKFLAGS=[
         "-Os",
+        "--specs=nano.specs",
+        "--specs=nosys.specs",
         "-Wl,--gc-sections,--relax",
         "-mthumb"
     ],
